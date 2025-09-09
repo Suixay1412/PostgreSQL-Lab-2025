@@ -79,11 +79,10 @@ docker run hello-world
 ```
 
 **บันทึกผลการทดลอง - การเตรียมความพร้อม:**
-```
+
 <img width="368" height="52" alt="image" src="https://github.com/user-attachments/assets/70d18d74-a2b3-4f23-8010-3da242936bd2" />
 
 <img width="791" height="510" alt="image" src="https://github.com/user-attachments/assets/607b8821-f008-4266-8591-9021e14166a1" />
-```
 
 ## ขั้นตอนการทดลอง
 
@@ -105,9 +104,8 @@ docker inspect postgres
 
 
 **บันทึกผลการทดลอง - Step 1:**
-```
+
 <img width="1453" height="211" alt="image" src="https://github.com/user-attachments/assets/d83f7749-c424-4734-95c4-d3a90e6c6807" />
-```
 
 ### Step 2: Create Docker Volume for Data Persistence
 
@@ -128,9 +126,8 @@ docker volume create postgres-config
 **คำอธิบาย**: Docker Volume จะทำให้ข้อมูลคงอยู่แม้ Container จะถูกลบ
 
 **บันทึกผลการทดลอง - Step 2:**
-```
+
 <img width="689" height="414" alt="image" src="https://github.com/user-attachments/assets/f555031a-02c9-443e-8d8d-f8e3776c4e13" />
-```
 
 ### Step 3: Create PostgreSQL Container with Volume
 
@@ -162,9 +159,8 @@ docker run --name postgres-lab \
 - `-c shared_buffers=256MB`: กำหนด shared buffers
 
 **บันทึกผลการทดลอง - Step 3:**
-```
+
 <img width="1613" height="67" alt="image" src="https://github.com/user-attachments/assets/6b95b139-756a-4b8e-82d5-107bf42cacb1" />
-```
 
 ### Step 4: Verify Container Status and Resource Usage
 
@@ -183,12 +179,11 @@ docker volume inspect postgres-data
 ```
 
 **บันทึกผลการทดลอง - Step 4:**
-```
+
 ใส่ Screenshot ของ:
 1. <img width="1410" height="71" alt="image" src="https://github.com/user-attachments/assets/cb89d320-0871-4625-a847-f951a9a1e28b" />
-2. ส่วนหนึ่งของ docker logs postgres-lab
-3. ผลการรัน docker stats
-```
+2. <img width="776" height="462" alt="image" src="https://github.com/user-attachments/assets/6a71f18a-a195-48bf-9275-d35427fd96a9" />
+3. <img width="1068" height="77" alt="image" src="https://github.com/user-attachments/assets/68e0d7ac-4429-4bee-91b5-bc0a26825ee0" />
 
 ### Step 5: Connect to PostgreSQL และตรวจสอบ Configuration
 
@@ -228,12 +223,11 @@ WHERE name IN ('shared_buffers', 'work_mem', 'maintenance_work_mem', 'effective_
 ```
 
 **บันทึกผลการทดลอง - Step 5:**
-```
+
 ใส่ Screenshot ของ:
-1. ผลการรัน SELECT version();
-2. ผลการรัน SHOW shared_buffers; SHOW work_mem; SHOW maintenance_work_mem;SHOW effective_cache_size;
-3. ผลการรัน \l และ \du
-```
+1. <img width="1167" height="120" alt="image" src="https://github.com/user-attachments/assets/4821999d-fde4-4cf5-b0b8-12ff6ec147a8" />
+2. <img width="326" height="528" alt="image" src="https://github.com/user-attachments/assets/ab621a6c-fea1-4cc7-ac49-876feb6e3ca5" />
+3. <img width="1236" height="395" alt="image" src="https://github.com/user-attachments/assets/bc95c450-b403-4652-b7e4-7e69d06b7ac9" />
 
 ### Step 6: Database Management Operations
 
@@ -272,12 +266,11 @@ WHERE datname = 'lab_db';
 ```
 
 **บันทึกผลการทดลอง - Step 6:**
-```
+
 ใส่ Screenshot ของ:
-1. ผลการสร้าง lab_db
-2. ผลการรัน \l+ แสดงฐานข้อมูลทั้งหมด
-3. ผลการ query ข้อมูลฐานข้อมูล
-```
+1. <img width="1231" height="281" alt="image" src="https://github.com/user-attachments/assets/c448f032-d5c4-4ca6-8dd7-58d4bd2d04bc" />
+2. <img width="1638" height="403" alt="image" src="https://github.com/user-attachments/assets/dbff69f1-9e8d-4552-9628-67ea7e21f37a" />
+3. <img width="793" height="325" alt="image" src="https://github.com/user-attachments/assets/0ddb5357-c300-447e-96c5-3c3b377499e0" />
 
 ### Step 7: User และ Role Management
 
@@ -330,12 +323,11 @@ WHERE r.rolname NOT LIKE 'pg_%';
 ```
 
 **บันทึกผลการทดลอง - Step 7:**
-```
+
 ใส่ Screenshot ของ:
-1. ผลการสร้าง users ทั้งหมด
-2. ผลการรัน \du+
-3. ผลการ query pg_roles
-```
+1. <img width="400" height="550" alt="image" src="https://github.com/user-attachments/assets/df62c63a-40a7-4427-9885-2bfd880c4425" />
+2. <img width="876" height="235" alt="image" src="https://github.com/user-attachments/assets/1fcd2103-0cf1-499f-9368-b66633fceb9a" />
+3. <img width="1139" height="437" alt="image" src="https://github.com/user-attachments/assets/4733ec2f-f2b0-4e8a-b710-e2ef846dba98" />
 
 ### Step 8: การจัดการสิทธิ์ User
 
@@ -392,17 +384,16 @@ GRANT SELECT ON postgres_test_table TO lab_user;
 ```
 
 **บันทึกผลการทดลอง - Step 8:**
-```
+
 ใส่ Screenshot ของ:
-1. ผลการ ALTER USER commands
-2. ผลการรัน \dp test_permissions
-3. ผลการ GRANT commands
-```
+1. <img width="407" height="88" alt="image" src="https://github.com/user-attachments/assets/9a0d3bfb-b332-4479-acd1-af06fac695e0" />
+2. <img width="960" height="191" alt="image" src="https://github.com/user-attachments/assets/5c5e5f88-998a-4541-9575-c7e21735df0a" />
+3. <img width="593" height="40" alt="image" src="https://github.com/user-attachments/assets/165a7c4d-1910-4dab-87ee-778745ee5968" />
+
 **คำถาม
  ```
 Access Privileges   postgres=arwdDxtm/postgres มีความหมายอย่างไร
-
-
+Ans postgres=arwdDxtm/postgres หมายความว่า user postgres ได้รับสิทธิ์เต็มในการจัดการตาราง เช่น อ่าน เขียน ลบ แก้ไข และใช้งาน trigger ต่าง ๆ โดยตัวอักษรแต่ละตัวแทนสิทธิ์เฉพาะ (a=INSERT, r=SELECT, w=UPDATE, d=DELETE ฯลฯ) สิทธิ์เหล่านี้ถูกมอบโดย user postgres เอง จึงเท่ากับเป็นเจ้าของที่มีสิทธิ์ควบคุมทุกการกระทำบนตารางนั้น
  ```
 ### Step 9: Schema Management และ Namespace
 
@@ -503,13 +494,12 @@ INSERT INTO hr.employee_orders (employee_id, customer_id, order_date, commission
 ```
 
 **บันทึกผลการทดลอง - Step 9:**
-```
+
 ใส่ Screenshot ของ:
-1. ผลการสร้าง schemas (\dn+)
-2. ผลการสร้างตารางในแต่ละ schema
-3. ผลการใส่ข้อมูลและ query ข้อมูล
-4. ข้อมูลในตาราง employee_orders ที่จะใช้สำหรับ JOIN ข้าม schema
-```
+1. <img width="983" height="301" alt="image" src="https://github.com/user-attachments/assets/ec96129f-d8d5-478d-a253-2aa665051ec7" />
+2. <img width="346" height="417" alt="image" src="https://github.com/user-attachments/assets/3c1bf8c2-2994-4504-9cdf-5d480ec95ec3" />
+3. <img width="760" height="400" alt="image" src="https://github.com/user-attachments/assets/1b2593e1-d5dd-4c4a-9c88-1bd82eac3aad" />
+4. <img width="778" height="268" alt="image" src="https://github.com/user-attachments/assets/00daf66b-4757-48e0-a188-9e7a36af84b1" />
 
 ### Step 10: ทดสอบการเข้าถึง Schema และ Search Path
 
@@ -570,13 +560,12 @@ SET search_path TO public;
 ```
 
 **บันทึกผลการทดลอง - Step 10:**
-```
+
 ใส่ Screenshot ของ:
-1. ผลการแสดง search_path
-2. ผลการ query ภายใน schema เดียวกัน (sales.customers + sales.orders)
-3. ผลการ JOIN ข้าม schemas (sales + hr + inventory)
-4. ข้อมูลที่แสดงจาก complex join ข้าม 3 schemas
-```
+1. <img width="213" height="104" alt="image" src="https://github.com/user-attachments/assets/a6400169-679e-415d-8bb8-f5c329643bef" />
+2. <img width="734" height="445" alt="image" src="https://github.com/user-attachments/assets/b85f2572-dd3a-4360-b99b-5a16a27292cb" />
+3. <img width="652" height="329" alt="image" src="https://github.com/user-attachments/assets/7fd10936-5498-4987-9078-f9dfe8727948" />
+4. <img width="861" height="465" alt="image" src="https://github.com/user-attachments/assets/4001df01-d2fd-482c-8cb5-e20d88001828" />
 
 ### Step 11: ทดสอบการเชื่อมต่อจาก User อื่น
 
@@ -602,12 +591,11 @@ INSERT INTO test_permissions (name) VALUES ('Test by lab_user'); -- ทำไม
 ```
 
 **บันทึกผลการทดลอง - Step 11:**
-```
+
 ใส่ Screenshot ของ:
-1. ผลการเชื่อมต่อด้วย lab_user
-2. ผลการทดสอบสิทธิ์ต่างๆ
-3. ข้อความ error (ถ้ามี) เมื่อไม่มีสิทธิ์
-```
+1. <img width="878" height="38" alt="image" src="https://github.com/user-attachments/assets/383dbe11-e131-4e03-bcbe-bcb0cf85aac1" />
+2. <img width="376" height="211" alt="image" src="https://github.com/user-attachments/assets/49609316-cef6-4b03-97d6-a37f244b24a2" />
+3. <img width="596" height="97" alt="image" src="https://github.com/user-attachments/assets/dace3cbc-7e53-40c5-b500-94ffd0ef705c" />
 
 ### Step 12: การจัดการ Volume และ Data Persistence
 
