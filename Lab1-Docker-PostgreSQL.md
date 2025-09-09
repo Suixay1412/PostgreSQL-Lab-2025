@@ -625,13 +625,11 @@ docker run --name postgres-backup-test \
 ```
 
 **บันทึกผลการทดลอง - Step 12:**
-```
+
 ใส่ Screenshot ของ:
 1. <img width="1167" height="233" alt="image" src="https://github.com/user-attachments/assets/f1e3f4c1-ec1c-4ec9-8f47-2d0e55db25ce" />
-
-2. ยืนยันว่าข้อมูลยังอยู่หลังจาก restart
-3. ผลการสร้าง container พร้อม bind mount
-```
+2. <img width="893" height="99" alt="image" src="https://github.com/user-attachments/assets/8e8030ea-3604-4666-a125-99fbe5c3648b" />
+3. <img width="1521" height="51" alt="image" src="https://github.com/user-attachments/assets/a84c9441-e62c-4b48-8709-ed78c2450e17" />
 
 ## การตรวจสอบผลงานและ Performance
 
@@ -651,9 +649,9 @@ docker volume inspect postgres-data
 ```
 
 **บันทึกผล Checkpoint 1:**
-```
-ใส่ Screenshot ของ resource usage และ volume information ที่นี่
-```
+
+<img width="1426" height="598" alt="image" src="https://github.com/user-attachments/assets/cf4c8554-79b5-46dd-a237-70e9770a9ce9" />
+
 
 ### Checkpoint 2: Database Performance และ Configuration
 ```sql
@@ -699,12 +697,11 @@ WHERE state = 'active';
 ```
 
 **บันทึกผล Checkpoint 2:**
-```
+
 ใส่ Screenshot ของ:
-1. Database statistics
-2. Memory configuration
-3. Active connections
-```
+1. <img width="835" height="324" alt="image" src="https://github.com/user-attachments/assets/63093064-7f71-4b64-95fa-be25d81f5cc4" />
+2. <img width="333" height="381" alt="image" src="https://github.com/user-attachments/assets/d03497a8-5c63-446a-81c4-27a211d9c83e" />
+3. <img width="620" height="234" alt="image" src="https://github.com/user-attachments/assets/a2b7b8da-c0a6-4363-b438-c6f96516c8d9" />
 
 ## การแก้ไขปัญหาเบื้องต้น
 
@@ -759,16 +756,23 @@ docker volume create postgres-data
 - Volume: `multi-postgres-data`
 
 ```bash
-# พื้นที่สำหรับคำตอบ - เขียน command ที่ใช้
+docker run --name multi-postgres -e POSTGRES_PASSWORD=multipass123 -v multi-postgres-data:/var/lib/postgresql/data -p 5434:5432 --memory="1.5g" --cpus="1.5" -d postgres
 
 ```
 
 **ผลการทำแบบฝึกหัด 1:**
 ```
 ใส่ Screenshot ของ:
-1. คำสั่งที่ใช้สร้าง container
-2. docker ps แสดง container ใหม่
-3. docker stats แสดงการใช้ resources
+1. docker run --name multi-postgres -e POSTGRES_PASSWORD=multipass123 -v multi-postgres-data:/var/lib/postgresql/data -p 5434:5432 --memory="1.5g" --cpus="1.5" -d postgres
+2. C:\Users\LOQ>docker ps
+CONTAINER ID   IMAGE      COMMAND                  CREATED          STATUS          PORTS                                         NAMES
+46ae0bb4ac51   postgres   "docker-entrypoint.s…"   9 seconds ago    Up 8 seconds    0.0.0.0:5434->5432/tcp, [::]:5434->5432/tcp   multi-postgres
+699fdbbdd3f7   postgres   "docker-entrypoint.s…"   10 minutes ago   Up 10 minutes   0.0.0.0:5433->5432/tcp, [::]:5433->5432/tcp   postgres-backup-test
+ba0d1b2b76d1   postgres   "docker-entrypoint.s…"   2 hours ago      Up 25 minutes   0.0.0.0:5432->5432/tcp, [::]:5432->5432/tcp   postgres-lab
+3. CONTAINER ID   NAME                   CPU %     MEM USAGE / LIMIT     MEM %     NET I/O         BLOCK I/O         PIDS
+46ae0bb4ac51   multi-postgres         0.03%     32.44MiB / 1.5GiB     2.11%     872B / 126B     0B / 41.1MB       6
+699fdbbdd3f7   postgres-backup-test   0.00%     17.78MiB / 7.612GiB   0.23%     998B / 126B     32.8kB / 32.8kB   6
+ba0d1b2b76d1   postgres-lab           0.00%     28.13MiB / 1GiB       2.75%     1.42kB / 126B   0B / 1.19MB       6
 ```
 
 ### แบบฝึกหัด 2: User Management และ Security
@@ -785,17 +789,36 @@ docker volume create postgres-data
    - `admin_user` (รหัสผ่าน: `admin123`) - เป็นสมาชิกของ db_admins
 
 ```sql
--- พื้นที่สำหรับคำตอบ - เขียน SQL commands ที่ใช้
-
+postgres=# CREATE DATABASE lab_db;
+CREATE DATABASE
+postgres=# \c lab_db
+You are now connected to database "lab_db" as user "postgres".
+lab_db=# CREATE ROLE app_developers NOLOGIN;
+CREATE ROLE data_analysts NOLOGIN;
+CREATE ROLE db_admins NOLOGIN;
+CREATE ROLE
+CREATE ROLE
+CREATE ROLE
+lab_db=# CREATE ROLE dev_user LOGIN PASSWORD 'dev123';
+CREATE ROLE analyst_user LOGIN PASSWORD 'analyst123';
+CREATE ROLE admin_user LOGIN PASSWORD 'admin123';
+CREATE ROLE
+CREATE ROLE
+CREATE ROLE
+lab_db=# GRANT app_developers TO dev_user;
+GRANT data_analysts TO analyst_user;
+GRANT db_admins TO admin_user;
+GRANT ROLE
+GRANT ROLE
+GRANT ROLE
 ```
 
 **ผลการทำแบบฝึกหัด 2:**
-```
+
 ใส่ Screenshot ของ:
-1. การสร้าง roles และ users
-2. ผลการรัน \du แสดงผู้ใช้ทั้งหมด
-3. ผลการทดสอบเชื่อมต่อด้วย user ต่างๆ
-```
+1. <img width="539" height="425" alt="image" src="https://github.com/user-attachments/assets/307657f4-3643-4c25-a6ff-f29c34e756bb" />
+2. <img width="637" height="217" alt="image" src="https://github.com/user-attachments/assets/fde98af9-1e0c-48ed-ad44-df8fc9cceccb" />
+3. <img width="530" height="116" alt="image" src="https://github.com/user-attachments/assets/51e41b87-6eae-427e-9d5a-2b7f8933b59f" />
 
 ### แบบฝึกหัด 3: Schema Design และ Complex Queries
 **คำสั่ง**: สร้างระบบฐานข้อมูลร้านค้าออนไลน์:
