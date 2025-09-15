@@ -963,17 +963,148 @@ INSERT INTO ecommerce.order_items (order_id, product_id, quantity, price) VALUES
 
 ```sql
 -- พื้นที่สำหรับคำตอบ - เขียน SQL commands ทั้งหมด
+docker exec -it multi-postgres psql -U postgres
 
+CREATE DATABASE ecommerce_db;
+\c ecommerce_db
+
+CREATE SCHEMA IF NOT EXISTS ecommerce;
+CREATE SCHEMA IF NOT EXISTS analytics;
+CREATE SCHEMA IF NOT EXISTS audit;
+
+SET search_path TO ecommerce;
+
+CREATE TABLE categories (
+    category_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description TEXT
+);
+
+CREATE TABLE products (
+    product_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    price NUMERIC(10,2),
+    category_id INT REFERENCES categories(category_id),
+    stock INT
+);
+
+CREATE TABLE customers (
+    customer_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100),
+    phone VARCHAR(20),
+    address VARCHAR(255)
+);
+
+CREATE TABLE orders (
+    order_id SERIAL PRIMARY KEY,
+    customer_id INT REFERENCES customers(customer_id),
+    order_date TIMESTAMP,
+    status VARCHAR(50),
+    total NUMERIC(10,2)
+);
+
+CREATE TABLE order_items (
+    order_item_id SERIAL PRIMARY KEY,
+    order_id INT REFERENCES orders(order_id),
+    product_id INT REFERENCES products(product_id),
+    quantity INT,
+    price NUMERIC(10,2)
+);
+
+INSERT INTO categories (name, description) VALUES
+('Electronics', 'Electronic devices and gadgets'),
+('Clothing', 'Apparel and fashion items'),
+('Books', 'Books and educational materials'),
+('Home & Garden', 'Home improvement and garden supplies'),
+('Sports', 'Sports equipment and accessories');
+
+INSERT INTO products (name, description, price, category_id, stock) VALUES
+('iPhone 15', 'Latest Apple smartphone', 999.99, 1, 50),
+('Samsung Galaxy S24', 'Android flagship phone', 899.99, 1, 45),
+('MacBook Air', 'Apple laptop computer', 1299.99, 1, 30),
+('Wireless Headphones', 'Bluetooth noise-canceling headphones', 199.99, 1, 100),
+('Gaming Mouse', 'High-precision gaming mouse', 79.99, 1, 75),
+('T-Shirt', 'Cotton casual t-shirt', 19.99, 2, 200),
+('Jeans', 'Denim blue jeans', 59.99, 2, 150),
+('Sneakers', 'Comfortable running sneakers', 129.99, 2, 80),
+('Jacket', 'Winter waterproof jacket', 89.99, 2, 60),
+('Hat', 'Baseball cap', 24.99, 2, 120),
+('Programming Book', 'Learn Python programming', 39.99, 3, 40),
+('Novel', 'Best-selling fiction novel', 14.99, 3, 90),
+('Textbook', 'University mathematics textbook', 79.99, 3, 25),
+('Garden Tools Set', 'Complete gardening tool kit', 49.99, 4, 35),
+('Plant Pot', 'Ceramic decorative pot', 15.99, 4, 80),
+('Tennis Racket', 'Professional tennis racket', 149.99, 5, 20),
+('Football', 'Official size football', 29.99, 5, 55);
+
+INSERT INTO customers (name, email, phone, address) VALUES
+('John Smith', 'john.smith@email.com', '555-0101', '123 Main St, City A'),
+('Sarah Johnson', 'sarah.j@email.com', '555-0102', '456 Oak Ave, City B'),
+('Mike Brown', 'mike.b@email.com', '555-0103', '789 Pine Rd, City C'),
+('Emily Davis', 'emily.d@email.com', '555-0104', '321 Elm St, City A'),
+('David Wilson', 'david.w@email.com', '555-0105', '654 Maple Dr, City B'),
+('Lisa Anderson', 'lisa.a@email.com', '555-0106', '987 Cedar Ln, City C'),
+('Tom Miller', 'tom.miller@email.com', '555-0107', '147 Birch St, City A'),
+('Amy Taylor', 'amy.t@email.com', '555-0108', '258 Ash Ave, City B');
+
+INSERT INTO orders (customer_id, order_date, status, total) VALUES
+(1, '2024-01-15 10:30:00', 'completed', 1199.98),
+(2, '2024-01-16 14:20:00', 'completed', 219.98),
+(3, '2024-01-17 09:15:00', 'completed', 159.97),
+(1, '2024-01-18 11:45:00', 'completed', 79.99),
+(4, '2024-01-19 16:30:00', 'completed', 89.98),
+(5, '2024-01-20 13:25:00', 'completed', 1329.98),
+(2, '2024-01-21 15:10:00', 'completed', 149.99),
+(6, '2024-01-22 12:40:00', 'completed', 294.97),
+(3, '2024-01-23 08:50:00', 'completed', 199.99),
+(7, '2024-01-24 17:20:00', 'completed', 169.98),
+(1, '2024-01-25 10:15:00', 'completed', 39.99),
+(8, '2024-01-26 14:35:00', 'completed', 599.97),
+(4, '2024-01-27 11:20:00', 'processing', 179.98),
+(5, '2024-01-28 09:45:00', 'shipped', 44.98),
+(6, '2024-01-29 16:55:00', 'completed', 129.99);
+
+INSERT INTO order_items (order_id, product_id, quantity, price) VALUES
+(1, 1, 1, 999.99),
+(1, 4, 1, 199.99),
+(2, 4, 1, 199.99),
+(2, 6, 1, 19.99),
+(3, 7, 1, 59.99),
+(3, 5, 1, 79.99),
+(3, 6, 1, 19.99),
+(4, 5, 1, 79.99),
+(5, 9, 1, 89.99),
+(6, 3, 1, 1299.99),
+(6, 12, 2, 14.99),
+(7, 16, 1, 149.99),
+(8, 8, 2, 129.99),
+(8, 10, 1, 24.99),
+(8, 11, 1, 39.99),
+(9, 4, 1, 199.99),
+(10, 2, 1, 899.99),
+(10, 6, 3, 19.99),
+(10, 14, 1, 49.99),
+(11, 11, 1, 39.99),
+(12, 1, 1, 999.99),
+(13, 17, 6, 29.99),
+(14, 15, 2, 15.99),
+(14, 12, 1, 14.99),
+(15, 8, 1, 129.99);
 ```
 
 **ผลการทำแบบฝึกหัด 3:**
-```
+
 ใส่ Screenshot ของ:
 1. โครงสร้าง schemas และ tables (\dn+, \dt ecommerce.*)
+<img width="791" height="402" alt="image" src="https://github.com/user-attachments/assets/b6b738aa-37ac-4867-9c6c-ff85ee270655" />
 2. ข้อมูลตัวอย่างในตารางต่างๆ
 3. ผลการรัน queries ที่สร้าง
+<img width="874" height="601" alt="image" src="https://github.com/user-attachments/assets/8585e4ba-2643-409d-8d47-b8e9cc3cbcd3" />
+<img width="702" height="613" alt="image" src="https://github.com/user-attachments/assets/28a55b1b-e5cd-4061-91bf-cc7966ae7d90" />
+<img width="516" height="556" alt="image" src="https://github.com/user-attachments/assets/3ddfd1de-a867-4dab-a83f-e2da2f8e97b8" />
 4. การวิเคราะห์ข้อมูลที่ได้
-```
 
 
 ## การทดสอบความเข้าใจ
@@ -988,7 +1119,19 @@ INSERT INTO ecommerce.order_items (order_id, product_id, quantity, price) VALUES
 
 **คำตอบ Quiz 1:**
 ```
-เขียนคำตอบที่นี่
+1.Named Volume เป็นพื้นที่จัดเก็บข้อมูลที่ Docker จัดการเอง ใช้สำหรับเก็บข้อมูลถาวรของ PostgreSQL โดยไม่ขึ้นอยู่กับโครงสร้างไฟล์ของโฮสต์ เหมาะกับการรันใน production เพราะจัดการง่าย
+Bind Mount เป็นการแมป directory หรือไฟล์จากโฮสต์เข้ากับ container โดยตรงเหมาะกับ dev/test เพราะสามารถเข้าถึงไฟล์จริงบนโฮสต์ได้ทันที สะดวกในการ debug หรือ backup แบบ manual แต่เสี่ยงต่อการ permission mismatch
+
+2.เพราะ shared_buffers เป็นหน่วยความจำหลักที่ PostgreSQL ใช้เก็บข้อมูลที่ query บ่อย ๆ ใน memory การตั้งประมาณ 25% ของ RAM เป็นค่าแนะนำจาก PostgreSQL community เนื่องจาก
+ถ้าน้อยเกินไปจะ cache ไม่พอทำให้ query ต้องดึงจาก disk บ่อย แต่ถ้ามากเกินไปจะเบียด memory ของ OS cache และ process อื่น ๆ ทำให้ระบบโดยรวมช้าลง
+
+3.แยกกลุ่มตารางตาม module/feature จัดการสิทธิ์การเข้าถึง แยกตาม schema ได้ง่าย ลดปัญหาการชนกันของชื่อตาราง และเพิ่มความยืดหยุ่นในการพัฒนา
+
+4.Consistency ได้ environment เดียวกันในทุกเครื่องนักพัฒนา
+Isolation แต่ละ project แยก container ไม่ชนกัน
+Portability สามารถย้าย/แจกจ่าย container image ไปที่เครื่องอื่นหรือ server ได้
+Rapid setup ตั้งค่า PostgreSQL พร้อม config ได้เร็ว
+Safe testing สามารถสร้าง/ลบ instance ใหม่ได้ทันที โดยไม่กระทบข้อมูลจริง
 ```
 
 
